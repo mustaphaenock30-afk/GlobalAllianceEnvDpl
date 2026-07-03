@@ -1,0 +1,6 @@
+{
+  "name": "Global Alliance on Environment",
+  "description": "Official website for Global Alliance on Environment with secure contact form and payments.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
