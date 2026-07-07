@@ -5,6 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { initializePaystackTransaction } from "@/lib/paystack.functions";
 import { toast } from "sonner";
 import { Leaf, ShieldCheck, HeartHandshake } from "lucide-react";
+import { getImgSrc } from "@/lib/images";
 
 export const Route = createFileRoute("/donate")({
   head: () => ({
@@ -20,7 +21,7 @@ export const Route = createFileRoute("/donate")({
         property: "og:description",
         content: "Your gift plants trees, restores land and trains communities.",
       },
-      { property: "og:image", content: "/images/Afforestation.jpeg" },
+      { property: "og:image", content: "/images/afforestation.jpeg" },
     ],
   }),
   component: Donate,
@@ -65,7 +66,7 @@ function Donate() {
       <section className="relative isolate overflow-hidden bg-primary text-primary-foreground">
         <div className="absolute inset-0 -z-10 opacity-25">
           <img
-            src="/images/Afforestation.jpeg"
+            src={getImgSrc("/images/Afforestation.jpeg")}
             alt=""
             referrerPolicy="no-referrer"
             className="h-full w-full object-cover"

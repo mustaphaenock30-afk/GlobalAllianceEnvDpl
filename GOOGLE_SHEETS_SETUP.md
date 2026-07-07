@@ -26,33 +26,34 @@ function doPost(e) {
   try {
     // Parse incoming JSON payload
     var data = JSON.parse(e.postData.contents);
-    
+
     // Get active sheet
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    
+
     // Append data row
     sheet.appendRow([
       data.timestamp || new Date().toLocaleString(),
       data.name,
       data.email,
       data.subject || "",
-      data.message
+      data.message,
     ]);
-    
+
     // Return success response
-    return ContentService.createTextOutput(JSON.stringify({ "result": "success" }))
-                         .setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput(JSON.stringify({ result: "success" })).setMimeType(
+      ContentService.MimeType.JSON,
+    );
   } catch (error) {
     // Return error response
-    return ContentService.createTextOutput(JSON.stringify({ "result": "error", "error": error.toString() }))
-                         .setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput(
+      JSON.stringify({ result: "error", error: error.toString() }),
+    ).setMimeType(ContentService.MimeType.JSON);
   }
 }
 
 // Handle options request for CORS support if needed
 function doOptions(e) {
-  return ContentService.createTextOutput("")
-                       .setMimeType(ContentService.MimeType.TEXT);
+  return ContentService.createTextOutput("").setMimeType(ContentService.MimeType.TEXT);
 }
 ```
 
@@ -67,7 +68,7 @@ function doOptions(e) {
 3. Configure the settings:
    - **Description**: `Contact Form Webhook`
    - **Execute as**: `Me (your email address)`
-   - **Who has access**: `Anyone` *(This is important so the secure backend of your app can send POST requests anonymously)*
+   - **Who has access**: `Anyone` _(This is important so the secure backend of your app can send POST requests anonymously)_
 4. Click **Deploy**.
 5. Google will ask you to authorize access. Click **Authorize Access**, select your Google Account, click **Advanced** (under safety warnings), and click **Go to Untitled project (unsafe)** to allow the script to write to your spreadsheet.
 6. Once deployed, copy the **Web app URL** from the success screen. It should look like this:

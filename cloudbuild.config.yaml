@@ -4,46 +4,46 @@
 steps:
   # Step 1: Install Dependencies
   # We use the official Node.js image to install packages using 'npm ci' for clean, reproducible builds.
-  - name: 'node:20-slim'
-    entrypoint: 'npm'
-    args: ['ci']
-    id: 'Install Dependencies'
+  - name: "node:20-slim"
+    entrypoint: "npm"
+    args: ["ci"]
+    id: "Install Dependencies"
 
   # Step 2: Build the Application
   # Runs the build script which compiles the client assets and puts them in .output/public.
-  - name: 'node:20-slim'
-    entrypoint: 'npm'
-    args: ['run', 'build']
-    id: 'Build Application'
+  - name: "node:20-slim"
+    entrypoint: "npm"
+    args: ["run", "build"]
+    id: "Build Application"
 
   # Step 3: Deploy and Sync Static Assets to Google Cloud Storage
   # We use the Google Cloud SDK builder to sync the build outputs to the GCS Bucket.
   # The '-d' flag deletes files from the bucket that are no longer present in the build directory.
   # We set headers to cache assets for high performance on CDN.
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
-    entrypoint: 'bash'
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+    entrypoint: "bash"
     args:
-      - '-c'
+      - "-c"
       - |
         echo "Deploying built assets to Google Cloud Storage bucket: gs://$_BUCKET_NAME"
-        
+
         # Sync all assets
         gsutil -m rsync -r -d .output/public gs://$_BUCKET_NAME
-        
+
         # Set Cache-Control header for static assets (js, css, images) for optimal CDN caching
         gsutil -m setmeta -h "Cache-Control:public, max-age=31536000" "gs://$_BUCKET_NAME/_mono/assets/*" || true
         gsutil -m setmeta -h "Cache-Control:public, max-age=31536000" "gs://$_BUCKET_NAME/images/*" || true
-        
+
         # Set Cache-Control header for index.html to prevent caching of outdated app versions
         gsutil setmeta -h "Cache-Control:public, max-age=0, must-revalidate" "gs://$_BUCKET_NAME/index.html" || true
-        
+
         echo "Deployment completed successfully!"
-    id: 'Deploy to Cloud Storage'
+    id: "Deploy to Cloud Storage"
 
 # Substitutions allow parameters to be passed dynamically during the trigger execution.
 # You can override this default bucket name in the Cloud Build Trigger settings in the Google Cloud Console.
 substitutions:
-  _BUCKET_NAME: 'global-alliance-environment-web-bucket'
+  _BUCKET_NAME: "global-alliance-environment-web-bucket"
 
 # Logging configuration
 options:

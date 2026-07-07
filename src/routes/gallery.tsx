@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site-layout";
+import { getImgSrc } from "@/lib/images";
 
 export const Route = createFileRoute("/gallery")({
   head: () => ({
@@ -12,7 +13,7 @@ export const Route = createFileRoute("/gallery")({
       },
       { property: "og:title", content: "Gallery" },
       { property: "og:description", content: "A visual look at our work on the ground." },
-      { property: "og:image", content: "/images/Gallery5.jpg" },
+      { property: "og:image", content: "/images/gallery5.jpg" },
     ],
   }),
   component: Gallery,
@@ -31,7 +32,7 @@ function Gallery() {
       <section className="relative isolate overflow-hidden bg-primary text-primary-foreground">
         <div className="absolute inset-0 -z-10 opacity-25">
           <img
-            src="/images/Gallery5.jpg"
+            src={getImgSrc("/images/Gallery5.jpg")}
             alt=""
             referrerPolicy="no-referrer"
             className="h-full w-full object-cover"
@@ -50,10 +51,10 @@ function Gallery() {
           {images.map((src) => (
             <div key={src} className="overflow-hidden rounded-lg break-inside-avoid">
               <img
-                src={`/images/${src}`}
+                src={getImgSrc(`/images/${src}`)}
                 alt=""
-                referrerPolicy="no-referrer"
                 loading="lazy"
+                referrerPolicy="no-referrer"
                 className="w-full transition duration-500 hover:scale-[1.03]"
               />
             </div>

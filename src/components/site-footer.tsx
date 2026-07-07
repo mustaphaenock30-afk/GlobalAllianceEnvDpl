@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Mail, MapPin, Phone } from "lucide-react";
+import { getImgSrc } from "@/lib/images";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -9,7 +10,7 @@ export function SiteFooter() {
         <div className="md:col-span-2">
           <div className="flex items-center gap-3">
             <img
-              src="/images/Logo3.jpg"
+              src={getImgSrc("/images/Logo3.jpg")}
               alt=""
               referrerPolicy="no-referrer"
               className="h-12 w-12 rounded-md object-cover"
@@ -52,6 +53,11 @@ export function SiteFooter() {
             <li>
               <Link to="/privacy" className="text-muted-foreground hover:text-foreground">
                 Privacy
+              </Link>
+            </li>
+            <li>
+              <Link to="/sync" className="text-muted-foreground hover:text-foreground">
+                Admin Sync
               </Link>
             </li>
           </ul>

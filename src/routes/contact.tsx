@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { submitContactMessage } from "@/lib/contact.functions";
 import { toast } from "sonner";
+import { getImgSrc } from "@/lib/images";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -53,7 +54,7 @@ function Contact() {
       <section className="relative isolate overflow-hidden bg-primary text-primary-foreground">
         <div className="absolute inset-0 -z-10 opacity-25">
           <img
-            src="/images/Gallery20.jpg"
+            src={getImgSrc("/images/Gallery20.jpg")}
             alt=""
             referrerPolicy="no-referrer"
             className="h-full w-full object-cover"

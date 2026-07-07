@@ -5,6 +5,7 @@ Rebuild **Global Alliance on Environment** in this project using the modern stac
 ## Why modernize (vs keeping Next.js Pages router)
 
 The current repo uses:
+
 - Next.js Pages router (legacy; App Router is the current Next standard)
 - Chakra UI v2 with `'use client'` directives in Pages router (mixed pattern, no real benefit)
 - A custom `server.js` boot script
@@ -15,11 +16,13 @@ The Lovable template uses TanStack Start (Vite-based SSR, file-based routes, edg
 ## Scope — what I'll build
 
 ### 1. Design system (src/styles.css)
+
 - Earth/nature palette in oklch: deep forest green primary, warm earth accent, off-white background, soft sand muted. No purple.
 - Typography: a clean modern pair (e.g. Outfit headings + Inter body) via @fontsource.
 - Reusable button/card variants for hero CTAs and service cards.
 
 ### 2. Routes (src/routes/)
+
 - `/` — Home: hero with mission, stats strip, services preview, featured projects, donate CTA.
 - `/about` — Mission, history, team (Founder, Director, Engineers, Secretary — images already in repo).
 - `/services` — Afforestation, Climate Change, Clean Water, Conservation, Capacity Building, Public Education, Land Restoration, Sustainable Practices, Public Awareness.
@@ -32,14 +35,17 @@ The Lovable template uses TanStack Start (Vite-based SSR, file-based routes, edg
 - `sitemap.xml` + `robots.txt`.
 
 ### 3. Shared layout
+
 - `Header` with logo + nav (desktop + mobile sheet menu via shadcn Sheet).
 - `Footer` with contact, quick links, socials.
 
 ### 4. Assets
+
 - Copy all images from the old repo's `/public` into this project's `/public/images/`.
 - Logo3.jpg becomes the site logo and og:image.
 
 ### 5. Paystack one-time donations (Lovable Cloud)
+
 - Enable Lovable Cloud (needed for server functions + storing the secret key).
 - Store `PAYSTACK_SECRET_KEY` via the secure secret form (you get it from Paystack Dashboard → Settings → API Keys).
 - **Server function** `initializePaystackTransaction({ amount, email, name })` — calls Paystack's `/transaction/initialize`, returns `authorization_url`. Reads the secret inside the handler.

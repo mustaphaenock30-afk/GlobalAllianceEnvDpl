@@ -7,11 +7,12 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
+import { initLocalImageCache } from "@/lib/images";
 
 function NotFoundComponent() {
   return (
@@ -99,7 +100,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", type: "image/jpeg", href: "/images/Logo3.jpg" },
+      { rel: "icon", type: "image/jpeg", href: "/images/logo3.jpg" },
     ],
   }),
   shellComponent: RootShell,
@@ -124,11 +125,19 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const [cacheLoaded, setCacheLoaded] = useState(false);
+
+  useEffect(() => {
+    initLocalImageCache().then(() => {
+      setCacheLoaded(true);
+    });
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      {/* We use cacheLoaded as a key to force route components to re-mount/re-evaluate getImgSrc when local cache is initialized */}
+      <Outlet key={cacheLoaded ? "cache-ready" : "cache-pending"} />
       <Toaster position="top-center" richColors />
     </QueryClientProvider>
   );

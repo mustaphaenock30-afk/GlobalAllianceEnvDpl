@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site-layout";
 import { ArrowRight } from "lucide-react";
+import { getImgSrc } from "@/lib/images";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -16,7 +17,7 @@ export const Route = createFileRoute("/services")({
         property: "og:description",
         content: "Programmes that protect the environment and empower communities.",
       },
-      { property: "og:image", content: "/images/Afforestation.jpeg" },
+      { property: "og:image", content: "/images/afforestation.jpeg" },
     ],
   }),
   component: Services,
@@ -76,7 +77,7 @@ function Services() {
       <section className="relative isolate overflow-hidden bg-primary text-primary-foreground">
         <div className="absolute inset-0 -z-10 opacity-25">
           <img
-            src="/images/Afforestation.jpeg"
+            src={getImgSrc("/images/Afforestation.jpeg")}
             alt=""
             referrerPolicy="no-referrer"
             className="h-full w-full object-cover"
@@ -100,10 +101,10 @@ function Services() {
             >
               <div className="aspect-[4/3] overflow-hidden">
                 <img
-                  src={`/images/${s.img}`}
+                  src={getImgSrc(`/images/${s.img}`)}
                   alt={s.title}
-                  referrerPolicy="no-referrer"
                   loading="lazy"
+                  referrerPolicy="no-referrer"
                   className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 />
               </div>

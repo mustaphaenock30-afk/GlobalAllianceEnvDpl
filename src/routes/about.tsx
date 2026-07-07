@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site-layout";
 import { Target, Eye, Heart } from "lucide-react";
+import { getImgSrc } from "@/lib/images";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -16,7 +17,7 @@ export const Route = createFileRoute("/about")({
         property: "og:description",
         content: "Our mission, vision and the team driving environmental change in Ghana.",
       },
-      { property: "og:image", content: "/images/Environment.jpg" },
+      { property: "og:image", content: "/images/environment.jpg" },
     ],
   }),
   component: About,
@@ -35,7 +36,7 @@ function About() {
       <section className="relative isolate overflow-hidden bg-primary text-primary-foreground">
         <div className="absolute inset-0 -z-10 opacity-30">
           <img
-            src="/images/Environment.jpg"
+            src={getImgSrc("/images/Environment.jpg")}
             alt=""
             referrerPolicy="no-referrer"
             className="h-full w-full object-cover"
@@ -82,7 +83,7 @@ function About() {
       <section className="container-page py-16">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
           <img
-            src="/images/Gallery15.jpg"
+            src={getImgSrc("/images/Gallery15.jpg")}
             alt="Community work"
             referrerPolicy="no-referrer"
             className="aspect-[4/3] w-full rounded-2xl object-cover"
@@ -121,7 +122,7 @@ function About() {
               >
                 <div className="aspect-square overflow-hidden rounded-lg">
                   <img
-                    src={`/images/${m.img}`}
+                    src={getImgSrc(`/images/${m.img}`)}
                     alt={m.name}
                     referrerPolicy="no-referrer"
                     className="h-full w-full object-cover"

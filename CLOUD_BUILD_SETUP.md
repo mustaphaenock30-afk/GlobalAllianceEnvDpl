@@ -40,7 +40,7 @@ First, we need a Storage Bucket to store and host the static files.
 2. Click the **three dots** icon at the far right of your bucket's row and select **Edit website configuration**.
 3. Set the following details:
    - **Index (main) page suffix**: `index.html`
-   - **Error (404) page**: `index.html` *(This is important for Single Page App client-side routing)*
+   - **Error (404) page**: `index.html` _(This is important for Single Page App client-side routing)_
 4. Click **Save**.
 
 ---
@@ -71,7 +71,7 @@ Now we link Cloud Build to your GitHub repository so it watches for changes.
    - **Event**: `Push to a branch`
    - **Source**: Click **Connect New Repository** and link your GitHub account. Select this repository and your production branch (e.g., `main` or `master`).
    - **Configuration**: Select **Cloud Build configuration file (yaml or json)**.
-   - **Location**: Inline / `cloudbuild.yaml` (the file we created in the repo root).
+   - **Location**: Inline / `cloudbuild.config.yaml` (the file we created in the repo).
 4. Under **Advanced** / **Substitution variables**:
    - Add a variable:
      - **Variable**: `_BUCKET_NAME`
