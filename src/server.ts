@@ -68,51 +68,64 @@ export default {
           }
 
           if (!existsLocally) {
-            console.log(
-              `[Server] Image ${filename} is missing locally. Attempting recovery from Supabase Storage...`,
+            const hasSupabase = !!(
+              process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY
             );
-            try {
-              const { supabaseAdmin } = await import("./integrations/supabase/client.server");
-              const { data: blob, error } = await supabaseAdmin.storage
-                .from("synced-images")
-                .download(filename);
+            if (hasSupabase) {
+              console.log(
+                `[Server] Image ${filename} is missing locally. Attempting recovery from Supabase Storage...`,
+              );
+              try {
+                const { supabaseAdmin } = await import("./integrations/supabase/client.server");
+                const { data: blob, error } = await supabaseAdmin.storage
+                  .from("synced-images")
+                  .download(filename);
 
-              if (error) {
-                console.error(`[Server] Failed to download ${filename} from Supabase:`, error);
-              } else if (blob) {
-                const arrayBuffer = await blob.arrayBuffer();
-                const buffer = Buffer.from(arrayBuffer);
-
-                // Cache it locally so subsequent requests serve instantly
-                for (const dirName of ["public/images", ".output/public/images"]) {
-                  const targetDir = path.resolve(process.cwd(), dirName);
-                  if (fs.existsSync(targetDir) || dirName === "public/images") {
-                    fs.mkdirSync(targetDir, { recursive: true });
-                    const filePath = path.join(targetDir, filename);
-                    fs.writeFileSync(filePath, buffer);
+                if (error) {
+                  if (error.message !== "Supabase is not configured") {
+                    console.error(`[Server] Failed to download ${filename} from Supabase:`, error);
                   }
+                } else if (blob) {
+                  const arrayBuffer = await blob.arrayBuffer();
+                  const buffer = Buffer.from(arrayBuffer);
+
+                  // Cache it locally so subsequent requests serve instantly
+                  for (const dirName of ["public/images", ".output/public/images"]) {
+                    const targetDir = path.resolve(process.cwd(), dirName);
+                    if (fs.existsSync(targetDir) || dirName === "public/images") {
+                      fs.mkdirSync(targetDir, { recursive: true });
+                      const filePath = path.join(targetDir, filename);
+                      fs.writeFileSync(filePath, buffer);
+                    }
+                  }
+                  console.log(
+                    `[Server] Successfully recovered ${filename} from Supabase and cached locally.`,
+                  );
+
+                  const mimeType = filename.toLowerCase().endsWith(".png")
+                    ? "image/png"
+                    : filename.toLowerCase().endsWith(".gif")
+                      ? "image/gif"
+                      : filename.toLowerCase().endsWith(".svg")
+                        ? "image/svg+xml"
+                        : filename.toLowerCase().endsWith(".mp4")
+                          ? "video/mp4"
+                          : "image/jpeg";
+
+                  return new Response(buffer, {
+                    headers: {
+                      "Content-Type": mimeType,
+                      "Cache-Control": "public, max-age=31536000, immutable",
+                    },
+                  });
                 }
-                console.log(
-                  `[Server] Successfully recovered ${filename} from Supabase and cached locally.`,
-                );
-
-                const mimeType = filename.toLowerCase().endsWith(".png")
-                  ? "image/png"
-                  : filename.toLowerCase().endsWith(".gif")
-                    ? "image/gif"
-                    : filename.toLowerCase().endsWith(".svg")
-                      ? "image/svg+xml"
-                      : "image/jpeg";
-
-                return new Response(buffer, {
-                  headers: {
-                    "Content-Type": mimeType,
-                    "Cache-Control": "public, max-age=31536000, immutable",
-                  },
-                });
+              } catch (recoveryErr) {
+                console.error(`[Server] Recovery error for ${filename}:`, recoveryErr);
               }
-            } catch (recoveryErr) {
-              console.error(`[Server] Recovery error for ${filename}:`, recoveryErr);
+            } else {
+              console.log(
+                `[Server] File ${filename} is missing locally, and Supabase is not configured for recovery.`,
+              );
             }
           }
         }

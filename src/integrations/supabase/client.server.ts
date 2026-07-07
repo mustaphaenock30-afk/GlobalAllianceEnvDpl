@@ -58,6 +58,18 @@ function createSupabaseAdminClient() {
           });
         }
 
+        if (prop === "storage") {
+          return {
+            createBucket: () => Promise.resolve({ data: null, error: null }),
+            from: () => ({
+              download: () =>
+                Promise.resolve({ data: null, error: new Error("Supabase is not configured") }),
+              upload: () =>
+                Promise.resolve({ data: null, error: new Error("Supabase is not configured") }),
+            }),
+          };
+        }
+
         // Handle common inspect/bundler/framework property accesses
         if (
           prop === "then" ||
