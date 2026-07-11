@@ -55,11 +55,6 @@ export function SiteFooter() {
                 Privacy
               </Link>
             </li>
-            <li>
-              <Link to="/sync" className="text-muted-foreground hover:text-foreground">
-                Admin Sync
-              </Link>
-            </li>
           </ul>
         </div>
         <div>
